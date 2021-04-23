@@ -58,7 +58,7 @@ class _AddTodoState extends State<AddTodo> {
       await storage.write(key: "todo", value: todo.text);
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomePage(title: "Hello")),
+          MaterialPageRoute(builder: (context) => HomePage()),
           (route) => false);
     }
   }

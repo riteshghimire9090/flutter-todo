@@ -3,16 +3,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_page.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  LoginPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _LoginPageState extends State<LoginPage> {
   var passwordShow = true;
 
   TextEditingController username = TextEditingController();
@@ -141,13 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void isLogined() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    if (prefs.getBool("isLogin") ?? false) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage(title: "Hello")),
-          (route) => false);
-    }
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
   }
 }
