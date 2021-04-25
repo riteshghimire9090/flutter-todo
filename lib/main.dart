@@ -7,8 +7,8 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        Provider<TodoProvider>(
-          create: (_) => TodoProvider(),
+        ChangeNotifierProvider.value(
+          value: TodoProvider(),
         ),
       ],
       child: MyApp(),

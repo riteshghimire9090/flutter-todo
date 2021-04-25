@@ -14,21 +14,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    todoList = Provider.of<TodoProvider>(context, listen: false).todoList;
+    todoList = Provider.of<TodoProvider>(context, listen: true).todoList;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Homee"),
+        title: Text("Home"),
       ),
-      body: Padding(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: ListView.builder(
-            itemCount: todoList.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text('${todoList[index]}'),
-              );
-            },
-          )),
+      body: isTodo(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.edit),
         onPressed: () {
@@ -41,5 +32,34 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
+  }
+
+  Widget isTodo() {
+    if (Provider.of<TodoProvider>(context, listen: false).todoList.isEmpty) {
+      return Center(
+        child: Text(
+          "No Todo's Found ",
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25.0),
+        ),
+      );
+    } else {
+      return Padding(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: ListView.builder(
+            itemCount: todoList.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text('${todoList[index]}'),
+                trailing: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    Provider.of<TodoProvider>(context, listen: false)
+                        .removeTodo(todoList[index]);
+                  },
+                ),
+              );
+            },
+          ));
+    }
   }
 }

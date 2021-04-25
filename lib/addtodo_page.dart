@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutterloginwithtodo/home_page.dart';
+import 'package:flutterloginwithtodo/provider/todo_provider.dart';
+import 'package:provider/provider.dart';
 
 class AddTodo extends StatefulWidget {
   @override
@@ -55,11 +56,9 @@ class _AddTodoState extends State<AddTodo> {
 
       ScaffoldMessenger.of(ctx).showSnackBar(snackBar);
     } else {
-      await storage.write(key: "todo", value: todo.text);
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-          (route) => false);
+      Provider.of<TodoProvider>(context, listen: false).addTodo(todo.text);
+      // await storage.write(key: "todo", value: todo.text);
+      Navigator.pop(context);
     }
   }
 }
