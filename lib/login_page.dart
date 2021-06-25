@@ -25,8 +25,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     // TODO: implement initState
-    isLogined();
+
     super.initState();
+    // isLogined();
   }
 
   @override
@@ -46,8 +47,7 @@ class _LoginPageState extends State<LoginPage> {
               TextField(
                 controller: username,
                 decoration: InputDecoration(
-                    errorText:
-                        isEmailValid ? "" : "Please enter a valid username",
+                    errorText: isEmailValid ? "" : "Username is r",
                     border: OutlineInputBorder(),
                     hintText: "Username"),
                 readOnly: false,
@@ -60,8 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                 controller: password,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    errorText:
-                        isPasswordValid ? "" : "Please enter correct Password",
+                    errorText: isPasswordValid ? "" : "Password is r",
                     hintText: "Password",
                     suffixIcon: IconButton(
                       icon: Icon(passwordVisibilityIcon),
