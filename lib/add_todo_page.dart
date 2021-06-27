@@ -43,14 +43,15 @@ class _AddTodoState extends State<AddTodo> {
                 hintText: "Coding ....",
               ),
             ),
-            RaisedButton(
-              child: Text(widget.isEditing ? "Update Todo" : "Add to Todo"),
+            ElevatedButton(
+              child: Text(
+                widget.isEditing ? "Update Todo" : "Add to Todo",
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () {
                 addTodos(context);
                 // addTodos(widget.id);
               },
-              color: Colors.blue,
-              textColor: Colors.white,
             )
           ],
         ),
@@ -58,7 +59,7 @@ class _AddTodoState extends State<AddTodo> {
     );
   }
 
-  void addTodos(ctx) async {
+  void addTodos(BuildContext ctx) async {
     if (todo.text.isEmpty) {
       final snackBar = SnackBar(
         content: Text("Please enter your todo's"),

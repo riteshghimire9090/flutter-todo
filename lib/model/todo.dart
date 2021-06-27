@@ -1,12 +1,16 @@
+import 'package:flutter/material.dart';
+
 class Todo {
   int id;
   String note;
+  Color color;
 
-  Todo({this.id, this.note});
+  Todo({this.id, this.note, this.color = Colors.white});
 
   Todo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     note = json['note'];
+    color = json['color'];
     print("id:$id \n note:$note");
     print(json.toString());
   }
@@ -16,6 +20,7 @@ class Todo {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = id;
     data['note'] = note;
+    data['color'] = color;
     return data;
   }
 }

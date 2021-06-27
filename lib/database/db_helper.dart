@@ -1,4 +1,4 @@
-import 'package:flutterloginwithtodo/model/Todo.dart';
+import 'package:flutterloginwithtodo/model/todo.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

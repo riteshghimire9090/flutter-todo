@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutterloginwithtodo/constants/constants.dart';
 import 'package:flutterloginwithtodo/home_page.dart';
 import 'package:flutterloginwithtodo/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,6 +68,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void checkLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    isLogin = prefs.getBool("isLogin") ?? false;
+    isLogin = prefs.getBool(IS_Login) ?? false;
   }
 }

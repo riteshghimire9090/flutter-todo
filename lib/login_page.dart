@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterloginwithtodo/constants/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_page.dart';
@@ -102,22 +103,17 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login(ctx) async {
-    if (password.text.isEmpty) {
+    if (password.text.isEmpty && username.text.isEmpty) {
       setState(() {
         isPasswordValid = false;
-      });
-    }
-    if (username.text.isEmpty) {
-      setState(() {
-        isEmailValid = false;
       });
     } else {
       if (username.text == "r" && password.text == "r") {
         print("login");
-        isLogined();
+        goToHome();
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
-        await prefs.setBool("isLogin", true).then((value) => print(value));
+        await prefs.setBool(IS_Login, true);
       } else {
         final snackBar = SnackBar(
           content: Text('Wrong Username and Password'),
@@ -126,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () {
               setState(() {
                 username.text = "";
-                password.text = '';
+                password.text = "";
               });
 
               // Some code to undo the change.
@@ -139,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void isLogined() async {
+  void goToHome() async {
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
   }
