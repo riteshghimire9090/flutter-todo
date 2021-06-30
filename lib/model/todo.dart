@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-
 class Todo {
   int id;
   String note;
-  Color color;
+  String color;
 
-  Todo({this.id, this.note, this.color = Colors.white});
+  Todo({this.id, this.note, this.color = "0xffffff"});
 
   Todo.fromJson(Map<String, dynamic> json) {
     id = json['id'];

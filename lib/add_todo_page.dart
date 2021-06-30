@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutterloginwithtodo/constants/constants.dart';
 import 'package:flutterloginwithtodo/provider/todo_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,9 @@ class AddTodo extends StatefulWidget {
 class _AddTodoState extends State<AddTodo> {
   final storage = new FlutterSecureStorage();
   TextEditingController todo = TextEditingController();
+  int colour;
+  List colors = [blueColor, whiteColor, redColor];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -32,8 +36,8 @@ class _AddTodoState extends State<AddTodo> {
       appBar: AppBar(
         title: Text(widget.isEditing ? "Update Todo" : "Add to Todo"),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             TextField(
@@ -42,6 +46,23 @@ class _AddTodoState extends State<AddTodo> {
                 border: OutlineInputBorder(),
                 hintText: "Coding ....",
               ),
+            ),
+            Container(
+              height: 80.0,
+              child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  // separatorBuilder: (BuildContext context, int index) =>
+                  //     Divider(
+                  //       color: Colors.red,
+                  //       thickness: 50.0,
+                  //       height: 60,
+                  //     ),
+                  itemCount: colors.length,
+                  padding: EdgeInsets.all(16.0),
+                  itemBuilder: (BuildContext cxt, int index) {
+                    return colourSelect(colors[index]);
+                  }),
             ),
             ElevatedButton(
               child: Text(
@@ -56,6 +77,18 @@ class _AddTodoState extends State<AddTodo> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget colourSelect(int colour) {
+    return FloatingActionButton(
+      backgroundColor: Color(colour),
+      onPressed: () {
+        setState(() {
+          this.colour = colour;
+        });
+        print(colour);
+      },
     );
   }
 
@@ -75,11 +108,12 @@ class _AddTodoState extends State<AddTodo> {
     } else {
       if (widget.isEditing) {
         Provider.of<TodoProvider>(context, listen: false)
-            .updateTodo(widget.id, todo.text);
+            .updateTodo(widget.id, todo.text, colour);
         // await storage.write(key: "todo", value: todo.text);
         Navigator.pop(context);
       } else {
-        Provider.of<TodoProvider>(context, listen: false).addTodo(todo.text);
+        Provider.of<TodoProvider>(context, listen: false)
+            .addTodo(todo.text, color: colour);
         // await storage.write(key: "todo", value: todo.text);
         Navigator.pop(context);
       }

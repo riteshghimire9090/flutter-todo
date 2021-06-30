@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutterloginwithtodo/constants/constants.dart';
 import 'package:flutterloginwithtodo/database/db_helper.dart';
 import 'package:flutterloginwithtodo/model/todo.dart';
 
@@ -11,8 +12,9 @@ class TodoProvider extends ChangeNotifier {
 
   List<Todo> get todoList => UnmodifiableListView(_todoList);
 
-  void addTodo(String note) {
-    Todo todo = Todo(id: _todoList.length + 1, note: note);
+  void addTodo(String note, {int color = whiteColor}) {
+    Todo todo =
+        Todo(id: _todoList.length + 1, note: note, color: color.toString());
     _todoList.add(todo);
     db.saveTodo(todo);
     notifyListeners();
@@ -34,8 +36,8 @@ class TodoProvider extends ChangeNotifier {
     return todo = await db.getTodo(id);
   }
 
-  void updateTodo(int id, String note) {
-    Todo todo = Todo(id: id, note: note);
+  void updateTodo(int id, String note, int color) {
+    Todo todo = Todo(id: id, note: note, color: color.toString());
     db.updateTodo(todo);
     _todoList.insert(id, todo);
     notifyListeners();

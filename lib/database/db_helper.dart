@@ -8,6 +8,7 @@ class DBHelper {
   final String tableTodo = "todoTable";
   final String colId = 'id';
   final String colNote = "note";
+  final String colColor = "color";
 
   static Database _db;
 
@@ -17,6 +18,7 @@ class DBHelper {
     if (_db != null) {
       return _db;
     }
+    print('----------------------------------');
     _db = await initDb();
     return _db;
   }
@@ -25,13 +27,14 @@ class DBHelper {
     String dbPath = await getDatabasesPath();
     String path = join(dbPath, "todo.db");
 
-    var db = openDatabase(path, version: 1, onCreate: _onCreate);
+    var db = openDatabase(path, version: 2, onCreate: _onCreate);
     return db;
   }
 
   void _onCreate(Database db, int newVersion) async {
     await db.execute('CREATE TABLE $tableTodo( '
         '$colId INTEGER PRIMARY KEY, '
+        '$colColor TEXT,'
         '$colNote TEXT)');
   }
 
@@ -46,10 +49,8 @@ class DBHelper {
 
   Future<List<Todo>> getAllTodo() async {
     var dbClient = await db;
-    var result = await dbClient.query(tableTodo, columns: [
-      colId,
-      colNote,
-    ]);
+    var result =
+        await dbClient.query(tableTodo, columns: [colId, colNote, colColor]);
 //    var result = await dbClient.rawQuery('SELECT * FROM $tableNote');
     print(result.toString());
     print(result.runtimeType);
@@ -57,7 +58,11 @@ class DBHelper {
     List<Todo> todoList = [];
 
     result.forEach((element) {
-      Todo todo = Todo(id: element['id'], note: element['note']);
+      Todo todo = Todo(
+        id: element['id'],
+        note: element['note'],
+        color: element['color'],
+      );
 
       todoList.add(todo);
     });
@@ -74,10 +79,7 @@ class DBHelper {
   Future<Todo> getTodo(int id) async {
     var dbClient = await db;
     List<Map> result = await dbClient.query(tableTodo,
-        columns: [
-          colId,
-          colNote,
-        ],
+        columns: [colId, colNote, colColor],
         where: '$colId = ?',
         whereArgs: [id]);
 //    var result = await dbClient.rawQuery('SELECT * FROM $tableNote WHERE $columnId = $id');

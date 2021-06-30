@@ -14,7 +14,7 @@ class TodoWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Material(
-        color: todo.color,
+        color: Color(int.parse(todo.color)),
         borderRadius: BorderRadius.circular(20),
         child: ListTile(
           title: Text(todo.note),
