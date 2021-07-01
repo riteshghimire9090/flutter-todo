@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterloginwithtodo/constants/constants.dart';
 import 'package:flutterloginwithtodo/home_page.dart';
@@ -16,9 +17,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     // TODO: implement initState
+    firebaseInit();
     checkLogin();
     startTime();
     super.initState();
+  }
+
+  void firebaseInit() async {
+    await Firebase.initializeApp();
   }
 
   @override
