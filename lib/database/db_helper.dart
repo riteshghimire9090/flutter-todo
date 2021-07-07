@@ -18,7 +18,7 @@ class DBHelper {
     if (_db != null) {
       return _db;
     }
-    print('----------------------------------');
+    // print('----------------------------------');
     _db = await initDb();
     return _db;
   }
@@ -43,7 +43,7 @@ class DBHelper {
     var result = await dbClient.insert(tableTodo, todo.toJson());
 //    var result = await dbClient.rawInsert(
 //        'INSERT INTO $tableNote ($columnTitle, $columnDescription) VALUES (\'${note.title}\', \'${note.description}\')');
-    print(result);
+//     print(result);
     return result;
   }
 
@@ -52,8 +52,8 @@ class DBHelper {
     var result =
         await dbClient.query(tableTodo, columns: [colId, colNote, colColor]);
 //    var result = await dbClient.rawQuery('SELECT * FROM $tableNote');
-    print(result.toString());
-    print(result.runtimeType);
+//     print(result.toString());
+//     print(result.runtimeType);
     result = result.toList();
     List<Todo> todoList = [];
 

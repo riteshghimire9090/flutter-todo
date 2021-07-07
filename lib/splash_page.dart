@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterloginwithtodo/constants/constants.dart';
 import 'package:flutterloginwithtodo/home_page.dart';
 import 'package:flutterloginwithtodo/login_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutterloginwithtodo/provider/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     firebaseInit();
-    checkLogin();
+    // checkLogin();
     startTime();
     super.initState();
   }
@@ -29,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    isLogin = Provider.of<AuthProvider>(context, listen: false).isLogdedIn();
     return Scaffold(
       body: Center(
         child: Container(
@@ -64,16 +65,14 @@ class _SplashScreenState extends State<SplashScreen> {
         : Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => LoginPage(
-                title: "Hello",
-              ),
+              builder: (context) => LoginPage(),
             ),
             (route) => false);
   }
 
-  void checkLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    isLogin = prefs.getBool(IS_Login) ?? false;
-  }
+  // void checkLogin() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //
+  //   isLogin = prefs.getBool(IS_Login) ?? false;
+  // }
 }

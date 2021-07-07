@@ -1,5 +1,5 @@
 class Todo {
-  int id;
+  var id;
   String note;
   String color;
 

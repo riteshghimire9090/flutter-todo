@@ -1,14 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterloginwithtodo/constants/constants.dart';
-import 'package:flutterloginwithtodo/provider/todo_provider.dart';
-import 'package:provider/provider.dart';
 
 class AddTodo extends StatefulWidget {
   final bool isEditing;
   final String note;
-  final int id;
-  AddTodo({this.id = 0, this.note = "", this.isEditing = false});
+  final String id;
+  AddTodo({this.id = "", this.note = "", this.isEditing = false});
 
   @override
   _AddTodoState createState() => _AddTodoState();
@@ -19,6 +18,7 @@ class _AddTodoState extends State<AddTodo> {
   TextEditingController todo = TextEditingController();
   int colour;
   List colors = [blueColor, whiteColor, redColor];
+  CollectionReference todos = FirebaseFirestore.instance.collection('todo');
 
   @override
   void initState() {
@@ -107,13 +107,30 @@ class _AddTodoState extends State<AddTodo> {
       ScaffoldMessenger.of(ctx).showSnackBar(snackBar);
     } else {
       if (widget.isEditing) {
-        Provider.of<TodoProvider>(context, listen: false)
-            .updateTodo(widget.id, todo.text, colour);
+        print(todos.get());
+        todos
+            .doc(widget.id)
+            .set({
+              'note': todo.text, // Stokes and Sons
+              'color': colour.toString() // 42
+            })
+            .then((value) => print("User Added"))
+            .catchError((error) => print("Failed to add user: $error"));
+        // Provider.of<TodoProvider>(context, listen: false)
+        //     .updateTodo(widget.id, todo.text, colour);
+
         // await storage.write(key: "todo", value: todo.text);
         Navigator.pop(context);
       } else {
-        Provider.of<TodoProvider>(context, listen: false)
-            .addTodo(todo.text, color: colour);
+        todos
+            .add({
+              'note': todo.text, // Stokes and Sons
+              'color': colour.toString() // 42
+            })
+            .then((value) => print("todo Added"))
+            .catchError((error) => print("Failed to add todo: $error"));
+        // Provider.of<TodoProvider>(context, listen: false)
+        //     .addTodo(todo.text, color: colour);
         // await storage.write(key: "todo", value: todo.text);
         Navigator.pop(context);
       }

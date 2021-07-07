@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutterloginwithtodo/constants/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'home_page.dart';
+import 'package:flutterloginwithtodo/provider/auth_provider.dart';
+import 'package:flutterloginwithtodo/register_page.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -16,7 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   var passwordShow = true;
 
-  TextEditingController username = TextEditingController();
+  TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
   bool isEmailValid = true;
@@ -35,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("Login"),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -46,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 10.0,
               ),
               TextField(
-                controller: username,
+                controller: email,
                 decoration: InputDecoration(
                     errorText: isEmailValid ? "" : "Username is r",
                     border: OutlineInputBorder(),
@@ -92,8 +87,24 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.red,
                 textColor: Colors.white,
               ),
+              RaisedButton(
+                child: Text("Login with Phone "),
+                onPressed: () {
+                  loginWithPhone(context);
+                },
+                color: Colors.red,
+                textColor: Colors.white,
+              ),
               SizedBox(
                 height: 10.0,
+              ),
+              RaisedButton(
+                child: Text("Register"),
+                onPressed: () {
+                  goToRegisterPage();
+                },
+                color: Colors.red,
+                textColor: Colors.white,
               ),
             ],
           ),
@@ -103,17 +114,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login(ctx) async {
-    if (password.text.isEmpty && username.text.isEmpty) {
+    if (password.text.isEmpty && email.text.isEmpty) {
       setState(() {
         isPasswordValid = false;
       });
     } else {
-      if (username.text == "r" && password.text == "r") {
+      if (email.text == "r" && password.text == "r") {
         print("login");
-        goToHome();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-
-        await prefs.setBool(IS_Login, true);
+        bool isSuccess = await Provider.of<AuthProvider>(context, listen: false)
+            .loginUser(email.text.trim(), password.text.trim());
+        if (isSuccess) {
+          goToHome();
+        }
       } else {
         final snackBar = SnackBar(
           content: Text('Wrong Username and Password'),
@@ -121,7 +133,39 @@ class _LoginPageState extends State<LoginPage> {
             label: 'Clear',
             onPressed: () {
               setState(() {
-                username.text = "";
+                email.text = "";
+                password.text = "";
+              });
+
+              // Some code to undo the change.
+            },
+          ),
+        );
+
+        ScaffoldMessenger.of(ctx).showSnackBar(snackBar);
+      }
+    }
+  }
+
+  void loginWithPhone(ctx) async {
+    if (password.text.isEmpty && email.text.isEmpty) {
+      setState(() {
+        isPasswordValid = false;
+      });
+    } else {
+      if (email.text == "r" && password.text == "r") {
+        print("login");
+        Provider.of<AuthProvider>(context, listen: false)
+            .loginPhone(email.text.trim());
+        goToHome();
+      } else {
+        final snackBar = SnackBar(
+          content: Text('Wrong Username and Password'),
+          action: SnackBarAction(
+            label: 'Clear',
+            onPressed: () {
+              setState(() {
+                email.text = "";
                 password.text = "";
               });
 
@@ -136,7 +180,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void goToHome() async {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => HomePage()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => RegisterPage()),
+        (route) => false);
+  }
+
+  void goToRegisterPage() async {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => RegisterPage()),
+        (route) => false);
   }
 }

@@ -1,11 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterloginwithtodo/add_todo_page.dart';
 import 'package:flutterloginwithtodo/model/todo.dart';
-import 'package:flutterloginwithtodo/provider/todo_provider.dart';
-import 'package:provider/provider.dart';
 
 class TodoWidget extends StatelessWidget {
   final Todo todo;
+  CollectionReference todos = FirebaseFirestore.instance.collection('todo');
 
   TodoWidget(this.todo);
 
@@ -21,8 +21,12 @@ class TodoWidget extends StatelessWidget {
           trailing: IconButton(
             icon: Icon(Icons.close),
             onPressed: () {
-              Provider.of<TodoProvider>(context, listen: false)
-                  .removeTodo(todo.id);
+              todos
+                  .doc(todo.id)
+                  .delete()
+                  .then((value) => print("User Deleted"))
+                  .catchError(
+                      (error) => print("Failed to delete user: $error"));
             },
           ),
           leading: IconButton(
